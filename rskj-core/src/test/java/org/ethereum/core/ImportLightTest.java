@@ -67,7 +67,7 @@ public class ImportLightTest {
         TransactionPoolImpl transactionPool = new TransactionPoolImpl(config, repository, null, receiptStore, null, listener, 10, 100);
 
         BlockChainImpl blockchain = new BlockChainImpl(
-                config, repository,
+                repository,
                 blockStore,
                 receiptStore,
                 transactionPool,
