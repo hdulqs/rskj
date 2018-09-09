@@ -33,7 +33,6 @@ import org.ethereum.db.BlockStore;
 import org.ethereum.db.ReceiptStore;
 import org.ethereum.db.TransactionInfo;
 import org.ethereum.listener.EthereumListener;
-import org.ethereum.manager.AdminInfo;
 import org.ethereum.util.RLP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +83,6 @@ public class BlockChainImpl implements Blockchain {
     private final ReceiptStore receiptStore;
     private final TransactionPool transactionPool;
     private EthereumListener listener;
-    private final AdminInfo adminInfo;
     private BlockValidator blockValidator;
 
     private volatile BlockChainStatus status = new BlockChainStatus(null, BlockDifficulty.ZERO);
@@ -102,14 +100,12 @@ public class BlockChainImpl implements Blockchain {
                           ReceiptStore receiptStore,
                           TransactionPool transactionPool,
                           EthereumListener listener,
-                          AdminInfo adminInfo,
                           BlockValidator blockValidator,
                           BlockExecutor blockExecutor) {
         this.repository = repository;
         this.blockStore = blockStore;
         this.receiptStore = receiptStore;
         this.listener = listener;
-        this.adminInfo = adminInfo;
         this.blockValidator = blockValidator;
         this.blockExecutor = blockExecutor;
         this.transactionPool = transactionPool;
@@ -128,8 +124,6 @@ public class BlockChainImpl implements Blockchain {
     public void setListener(EthereumListener listener) { this.listener = listener; }
 
     public BlockValidator getBlockValidator() { return blockValidator; }
-
-    public AdminInfo getAdminInfo() { return adminInfo; }
 
     @VisibleForTesting
     public void setBlockValidator(BlockValidator validator) {
@@ -278,11 +272,6 @@ public class BlockChainImpl implements Blockchain {
             }
 
             long totalTime = System.nanoTime() - saveTime;
-
-            if (adminInfo != null) {
-                adminInfo.addBlockExecTime(totalTime);
-            }
-
             logger.trace("block: num: [{}] hash: [{}], executed after: [{}]nano", block.getNumber(), block.getShortHash(), totalTime);
         }
 
